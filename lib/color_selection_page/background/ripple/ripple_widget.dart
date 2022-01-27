@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:reflectly/color_selection_page/background/ripple/ripple_painter.dart';
 
 class WRipple extends StatefulWidget {
-  const WRipple({Key? key, required this.color}) : super(key: key);
+  const WRipple({Key? key, required this.color, required this.center, required this.onEnd}) : super(key: key);
 
   @override
   _WRippleState createState() => _WRippleState();
 
   final List<Color> color;
+  final Offset center;
+  final void Function(Widget widget) onEnd;
 }
 
 class _WRippleState extends State<WRipple> {
@@ -19,6 +21,7 @@ class _WRippleState extends State<WRipple> {
   Widget _buildRadiusMultiplierTweenBuilder() {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
+      onEnd: ()=> widget.onEnd(widget),
       duration: const Duration(milliseconds: 300),
       builder: (context, value, child) {
         return _buildRippleCustomPainter(value);
@@ -32,7 +35,7 @@ class _WRippleState extends State<WRipple> {
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: CustomPaint(
-          painter: RipplePainter(widget.color, radiusMultiplier),
+          painter: RipplePainter(widget.color, radiusMultiplier, widget.center),
         ),
       );
     });

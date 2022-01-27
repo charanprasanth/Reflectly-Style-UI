@@ -17,7 +17,7 @@ class WColorSelectionIcon extends StatefulWidget {
   final List<Color> color;
   final double scrollAmount;
   final int index;
-  final void Function(List<Color> color) onTapDown;
+  final void Function(int index, List<Color> color, TapDownDetails) onTapDown;
 }
 
 class _WColorSelectionIconState extends State<WColorSelectionIcon> {
@@ -32,10 +32,7 @@ class _WColorSelectionIconState extends State<WColorSelectionIcon> {
       child: Transform.scale(
         scale: scale!,
         child: GestureDetector(
-          onTapDown: (tapDownDetails) {
-
-            widget.onTapDown(widget.color);
-          },
+          onTapDown: (tapDownDetails) => widget.onTapDown(widget.index, widget.color, tapDownDetails),
           child: _buildIcon(),
         ),
       ),
@@ -44,13 +41,18 @@ class _WColorSelectionIconState extends State<WColorSelectionIcon> {
 
   Widget _buildIcon() {
     const double diameter = 100.0;
-    return Container(
-      width: diameter,
-      height: diameter,
-      decoration: BoxDecoration(
-        gradient: _gradient(),
-        border: Border.all(color: Colors.white, width: 4.0),
-        borderRadius: BorderRadius.circular(3000),
+    return PhysicalModel(
+      color: Colors.transparent,
+      elevation: 8.0,
+      shape: BoxShape.circle,
+      child: Container(
+        width: diameter,
+        height: diameter,
+        decoration: BoxDecoration(
+          gradient: _gradient(),
+          border: Border.all(color: Colors.white, width: 4.0),
+          borderRadius: BorderRadius.circular(3000),
+        ),
       ),
     );
   }

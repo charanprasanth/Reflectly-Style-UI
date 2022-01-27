@@ -10,7 +10,7 @@ class WColorSelectionIcons extends StatefulWidget {
   _WColorSelectionIconsState createState() => _WColorSelectionIconsState();
 
   final List<List<Color>> colors;
-  final void Function(List<Color> color) onTapDown;
+  final void Function(List<Color> color, TapDownDetails) onTapDown;
 }
 
 class _WColorSelectionIconsState extends State<WColorSelectionIcons> {
@@ -40,7 +40,12 @@ class _WColorSelectionIconsState extends State<WColorSelectionIcons> {
         index: index,
         scrollAmount: _scrollAmount,
         color: color,
-        onTapDown: widget.onTapDown,
+        onTapDown: (index, color, tapDownDetails) {
+          widget.onTapDown(color, tapDownDetails);
+          _pageController.animateToPage(index,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.linear);
+        },
       ),
     );
   }

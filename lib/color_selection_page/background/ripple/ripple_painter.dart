@@ -3,14 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class RipplePainter extends CustomPainter {
-  const RipplePainter(this.color, this.radiusMultiplier);
+  const RipplePainter(this.color, this.radiusMultiplier, this.center);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Offset center = Offset(size.width / 2.0, size.height / 2.0);
-    final double radius = _calcRadius(size);
+    // final Offset center = Offset(size.width / 2.0, size.height / 2.0);
+    final double radius = _calcRadius(size) * radiusMultiplier;
     final Paint paint = Paint();
     paint.shader = _gradientShader(radius);
+    paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 20.0);
 
     canvas.drawCircle(center, radius, paint);
   }
@@ -35,4 +36,5 @@ class RipplePainter extends CustomPainter {
 
   final List<Color> color;
   final double radiusMultiplier;
+  final Offset center;
 }

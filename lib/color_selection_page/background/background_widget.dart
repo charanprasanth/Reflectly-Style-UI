@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:reflectly/color_selection_page/background/ripple/ripple_widget.dart';
 
 class WBackground extends StatefulWidget {
-  const WBackground({Key? key, required this.initialColor, required this.child, required this.controller})
+  const WBackground(
+      {Key? key,
+      required this.initialColor,
+      required this.child,
+      required this.controller})
       : super(key: key);
 
   @override
@@ -62,12 +66,20 @@ class _WBackgroundState extends State<WBackground> {
 }
 
 class BackgroundController extends ChangeNotifier {
-  void doPulse(List<Color> color){
-    widgets.add(WRipple(color: color));
+  void doPulse(List<Color> color, Offset from) {
+    void onEndCallback(final Widget widget) {
+      if (widgets.last == widget) return;
+      widgets.remove(widget);
+    }
+
+    final WRipple ripple = WRipple(
+      color: color,
+      center: from,
+      onEnd: onEndCallback,
+    );
+    widgets.add(ripple);
     notifyListeners();
   }
 
   List<Widget> widgets = <Widget>[];
-
-
 }
